@@ -14,7 +14,7 @@ object LocalEmailsDataProvider {
         sender = LocalAccountsDataProvider.defaultAccount
     )
 
-    private val allEmails = listOf(
+    val allEmails = listOf(
         Email(
             id = 0L,
             sender = LocalAccountsDataProvider.getContactAccountById(9L),
