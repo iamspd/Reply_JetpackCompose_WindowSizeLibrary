@@ -141,7 +141,7 @@ fun EmailListItemHeader(
     ) {
         ProfileAvatar(
             avatarRes = email.sender.avatar,
-            contentDescriptionRes = email.sender.firstName,
+            contentDescriptionRes = stringResource(email.sender.firstName),
             modifier = Modifier
                 .size(dimensionResource(R.dimen.email_header_profile_size))
         )
@@ -181,7 +181,7 @@ fun ReplyAppTopBar(modifier: Modifier = Modifier) {
         )
         ProfileAvatar(
             avatarRes = LocalAccountsDataProvider.defaultAccount.avatar,
-            contentDescriptionRes = R.string.profile,
+            contentDescriptionRes = stringResource(R.string.profile),
             modifier = Modifier
                 .padding(end = dimensionResource(R.dimen.topbar_profile_image_padding_end))
                 .size(dimensionResource(R.dimen.topbar_profile_image_size))
@@ -193,13 +193,13 @@ fun ReplyAppTopBar(modifier: Modifier = Modifier) {
 fun ProfileAvatar(
     modifier: Modifier = Modifier,
     @DrawableRes avatarRes: Int,
-    @StringRes contentDescriptionRes: Int
+    contentDescriptionRes: String
 ) {
     Box(modifier = modifier) {
         Image(
             modifier = Modifier.clip(CircleShape),
             painter = painterResource(avatarRes),
-            contentDescription = stringResource(contentDescriptionRes)
+            contentDescription = contentDescriptionRes
         )
     }
 }
