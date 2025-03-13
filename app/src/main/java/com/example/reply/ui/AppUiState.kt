@@ -8,6 +8,7 @@ data class AppUiState(
     val mailboxes: Map<MailboxType, List<Email>> = emptyMap(),
     val currentMailbox: MailboxType = MailboxType.Inbox,
     val currentSelectedEmail: Email = LocalEmailsDataProvider.defaultEmail,
+    val isShowingHomePage: Boolean = true
 ) {
     val currentMailboxEmails: List<Email> by lazy { mailboxes[currentMailbox]!! }
 }

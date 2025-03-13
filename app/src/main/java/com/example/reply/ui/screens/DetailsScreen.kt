@@ -1,6 +1,7 @@
 package com.example.reply.ui.screens
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,6 +60,11 @@ fun DetailsScreen(
     appUiState: AppUiState,
     onBackPressed: () -> Unit,
 ) {
+
+    BackHandler {
+        onBackPressed()
+    }
+    
     Box(modifier = modifier) {
         LazyColumn(
             contentPadding = WindowInsets.safeDrawing.asPaddingValues(),
@@ -80,7 +86,7 @@ fun DetailsScreen(
                     mailboxType = appUiState.currentMailbox,
                     modifier = Modifier
                         .padding(dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
-                    )
+                )
             }
         }
     }
@@ -99,7 +105,8 @@ fun DetailsScreenTopBar(
         IconButton(
             modifier = Modifier
                 .padding(
-                    start = dimensionResource(R.dimen.detail_topbar_back_button_padding_horizontal))
+                    start = dimensionResource(R.dimen.detail_topbar_back_button_padding_horizontal)
+                )
                 .background(MaterialTheme.colorScheme.surface, shape = CircleShape),
             onClick = onBackButtonClicked
         ) {
@@ -169,7 +176,7 @@ fun DetailsScreenEmailHeader(
             modifier = Modifier.size(dimensionResource(R.dimen.email_header_profile_size)),
             avatarRes = email.sender.avatar,
             contentDescriptionRes = stringResource(email.sender.firstName) + " "
-            + stringResource(email.sender.lastName)
+                    + stringResource(email.sender.lastName)
         )
         Column(
             modifier = Modifier
@@ -200,18 +207,20 @@ fun DetailsScreenButtonBar(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
-        when(mailboxType) {
+        when (mailboxType) {
             MailboxType.Drafts ->
                 ActionButton(
                     onButtonClick = displayToast,
                     buttonText = stringResource(R.string.continue_composing)
                 )
+
             MailboxType.Spam ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(
-                        dimensionResource(R.dimen.detail_button_bar_item_spacing))
+                        dimensionResource(R.dimen.detail_button_bar_item_spacing)
+                    )
                 ) {
                     ActionButton(
                         onButtonClick = displayToast,
@@ -225,25 +234,27 @@ fun DetailsScreenButtonBar(
                         containsIrreversibleAction = true
                     )
                 }
+
             MailboxType.Inbox,
-                MailboxType.Sent ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            dimensionResource(R.dimen.detail_button_bar_item_spacing))
-                    ) {
-                        ActionButton(
-                            onButtonClick = displayToast,
-                            buttonText = stringResource(R.string.reply),
-                            modifier = Modifier.weight(1f)
-                        )
-                        ActionButton(
-                            onButtonClick = displayToast,
-                            buttonText = stringResource(R.string.reply_all),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+            MailboxType.Sent ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        dimensionResource(R.dimen.detail_button_bar_item_spacing)
+                    )
+                ) {
+                    ActionButton(
+                        onButtonClick = displayToast,
+                        buttonText = stringResource(R.string.reply),
+                        modifier = Modifier.weight(1f)
+                    )
+                    ActionButton(
+                        onButtonClick = displayToast,
+                        buttonText = stringResource(R.string.reply_all),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
         }
     }
 }
@@ -261,7 +272,7 @@ fun ActionButton(
             modifier = Modifier
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                if(containsIrreversibleAction) {
+                if (containsIrreversibleAction) {
                     MaterialTheme.colorScheme.onErrorContainer
                 } else {
                     MaterialTheme.colorScheme.primaryContainer

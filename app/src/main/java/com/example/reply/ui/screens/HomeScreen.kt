@@ -39,7 +39,8 @@ fun PreviewHomeScreen() {
                 mailboxes = LocalEmailsDataProvider.allEmails.groupBy { it.mailbox }
             ),
             onTabPressed = {},
-            onEmailCardClick = {}
+            onEmailCardClick = {},
+            onDetailsScreenBackPressed = {}
         )
     }
 }
@@ -49,6 +50,7 @@ fun HomeScreen(
     appUiState: AppUiState,
     onTabPressed: (MailboxType) -> Unit,
     onEmailCardClick: (Email) -> Unit,
+    onDetailsScreenBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navigationItemContentList = listOf(
@@ -74,13 +76,21 @@ fun HomeScreen(
         )
     )
 
-    HomeContent(
-        appUiState = appUiState,
-        onEmailCardClick = onEmailCardClick,
-        onTabPressed = onTabPressed,
-        navigationItemContentList = navigationItemContentList,
-        modifier = modifier
-    )
+    if(appUiState.isShowingHomePage) {
+        HomeContent(
+            appUiState = appUiState,
+            onEmailCardClick = onEmailCardClick,
+            onTabPressed = onTabPressed,
+            navigationItemContentList = navigationItemContentList,
+            modifier = modifier
+        )
+    } else {
+        DetailsScreen(
+            appUiState = appUiState,
+            onBackPressed = onDetailsScreenBackPressed,
+            modifier = modifier
+        )
+    }
 }
 
 @Composable

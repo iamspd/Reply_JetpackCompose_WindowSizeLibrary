@@ -17,6 +17,7 @@ fun ReplyApp(
         appUiState = appUiState,
         onTabPressed = { viewModel.updateCurrentMailbox(mailboxType = it) },
         onEmailCardClick = { viewModel.updateDetailsScreenState(email = it) },
+        onDetailsScreenBackPressed = { viewModel.resetHomeScreenStates() },
         modifier = modifier
     )
 }

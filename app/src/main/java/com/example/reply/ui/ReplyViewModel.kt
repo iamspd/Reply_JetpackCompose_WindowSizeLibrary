@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class ReplyViewModel: ViewModel() {
+class ReplyViewModel : ViewModel() {
 
     private val _appUiState = MutableStateFlow(AppUiState())
     val appUiState: StateFlow<AppUiState> = _appUiState.asStateFlow()
@@ -26,10 +26,21 @@ class ReplyViewModel: ViewModel() {
         }
     }
 
+    fun resetHomeScreenStates() {
+        _appUiState.update {
+            it.copy(
+                currentSelectedEmail = it.mailboxes[it.currentMailbox]?.get(0)
+                    ?: LocalEmailsDataProvider.defaultEmail,
+                isShowingHomePage = true
+            )
+        }
+    }
+
     fun updateDetailsScreenState(email: Email) {
         _appUiState.update {
             it.copy(
-                currentSelectedEmail = email
+                currentSelectedEmail = email,
+                isShowingHomePage = false
             )
         }
     }
