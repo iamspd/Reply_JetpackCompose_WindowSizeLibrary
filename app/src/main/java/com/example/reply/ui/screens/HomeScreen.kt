@@ -45,7 +45,7 @@ fun PreviewHomeScreen() {
 }
 
 @Composable
-private fun HomeScreen(
+fun HomeScreen(
     appUiState: AppUiState,
     onTabPressed: (MailboxType) -> Unit,
     onEmailCardClick: (Email) -> Unit,
@@ -74,7 +74,7 @@ private fun HomeScreen(
         )
     )
 
-    AppContent(
+    HomeContent(
         appUiState = appUiState,
         onEmailCardClick = onEmailCardClick,
         onTabPressed = onTabPressed,
@@ -84,7 +84,7 @@ private fun HomeScreen(
 }
 
 @Composable
-private fun AppContent(
+private fun HomeContent(
     appUiState: AppUiState,
     onEmailCardClick: (Email) -> Unit,
     onTabPressed: (MailboxType) -> Unit,
