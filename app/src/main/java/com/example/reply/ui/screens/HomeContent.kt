@@ -1,5 +1,7 @@
 package com.example.reply.ui.screens
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -26,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +42,7 @@ import com.example.reply.data.local.LocalAccountsDataProvider
 import com.example.reply.data.local.LocalEmailsDataProvider
 import com.example.reply.ui.AppUiState
 import com.example.reply.ui.theme.ReplyTheme
+import kotlinx.coroutines.selects.select
 
 @Preview(showBackground = true)
 @Composable
@@ -53,6 +59,47 @@ fun PreviewHomeContent() {
 }
 
 @Composable
+fun EmailListAndDetailContent(
+    modifier: Modifier = Modifier,
+    appUiState: AppUiState,
+    onEmailCardClick: (Email) -> Unit
+) {
+    val emails = appUiState.currentMailboxEmails
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        LazyColumn(
+            contentPadding = WindowInsets.statusBars.asPaddingValues(),
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = dimensionResource(R.dimen.email_list_only_horizontal_padding)),
+            verticalArrangement = Arrangement.spacedBy(
+                dimensionResource(R.dimen.email_list_item_vertical_spacing)
+            )
+        ) {
+            items(emails, key = { email -> email.id }) { email ->
+                EmailListItem(
+                    email = email,
+                    isSelected = appUiState.currentSelectedEmail.id == email.id,
+                    onCardClick = { onEmailCardClick(email) }
+                )
+            }
+        }
+        val activity = LocalActivity.current as Activity
+        DetailsScreen(
+            appUiState = appUiState,
+            modifier = Modifier
+                .padding(top = dimensionResource(R.dimen.email_list_item_vertical_spacing))
+                .weight(1f)
+                .testTag(stringResource(R.string.details_screen)),
+            onBackPressed = { activity.finish() }
+        )
+    }
+}
+
+@Composable
 fun EmailListContent(
     modifier: Modifier = Modifier,
     appUiState: AppUiState,
@@ -64,7 +111,8 @@ fun EmailListContent(
         modifier = modifier,
         contentPadding = WindowInsets.safeDrawing.asPaddingValues(),
         verticalArrangement = Arrangement.spacedBy(
-            dimensionResource(R.dimen.email_list_item_vertical_spacing))
+            dimensionResource(R.dimen.email_list_item_vertical_spacing)
+        )
     ) {
         item {
             ReplyAppTopBar(

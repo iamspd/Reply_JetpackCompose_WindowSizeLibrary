@@ -44,6 +44,7 @@ import com.example.reply.data.local.LocalAccountsDataProvider
 import com.example.reply.data.local.LocalEmailsDataProvider
 import com.example.reply.ui.AppUiState
 import com.example.reply.ui.theme.ReplyTheme
+import com.example.reply.ui.utils.AppContentType
 import com.example.reply.ui.utils.AppNavigationType
 
 @Preview(showBackground = true)
@@ -55,6 +56,7 @@ fun PreviewHomeScreen() {
                 mailboxes = LocalEmailsDataProvider.allEmails.groupBy { it.mailbox }
             ),
             navigationType = AppNavigationType.BOTTOM_NAVIGATION,
+            contentType = AppContentType.LIST_ONLY,
             onTabPressed = {},
             onEmailCardClick = {},
             onDetailsScreenBackPressed = {}
@@ -66,6 +68,7 @@ fun PreviewHomeScreen() {
 fun HomeScreen(
     appUiState: AppUiState,
     navigationType: AppNavigationType,
+    contentType: AppContentType,
     onTabPressed: (MailboxType) -> Unit,
     onEmailCardClick: (Email) -> Unit,
     onDetailsScreenBackPressed: () -> Unit,
@@ -114,6 +117,7 @@ fun HomeScreen(
             HomeContent(
                 appUiState = appUiState,
                 navigationType = navigationType,
+                contentType = contentType,
                 onEmailCardClick = onEmailCardClick,
                 onTabPressed = onTabPressed,
                 navigationItemContentList = navigationItemContentList,
@@ -125,6 +129,7 @@ fun HomeScreen(
             HomeContent(
                 appUiState = appUiState,
                 navigationType = navigationType,
+                contentType = contentType,
                 onEmailCardClick = onEmailCardClick,
                 onTabPressed = onTabPressed,
                 navigationItemContentList = navigationItemContentList,
@@ -133,6 +138,7 @@ fun HomeScreen(
         } else {
             DetailsScreen(
                 appUiState = appUiState,
+                isFullScreen = true,
                 onBackPressed = onDetailsScreenBackPressed,
                 modifier = modifier
             )
@@ -144,6 +150,7 @@ fun HomeScreen(
 private fun HomeContent(
     appUiState: AppUiState,
     navigationType: AppNavigationType,
+    contentType: AppContentType,
     onEmailCardClick: (Email) -> Unit,
     onTabPressed: (MailboxType) -> Unit,
     navigationItemContentList: List<NavigationItemContent>,
@@ -165,15 +172,23 @@ private fun HomeContent(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            EmailListContent(
-                appUiState = appUiState,
-                onEmailCardClick = onEmailCardClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.email_list_only_horizontal_padding)
-                    )
-            )
+            if (contentType == AppContentType.LIST_AND_DETAIL) {
+                EmailListAndDetailContent(
+                    appUiState = appUiState,
+                    onEmailCardClick = onEmailCardClick,
+                    modifier = Modifier.weight(1f)
+                )
+            } else {
+                EmailListContent(
+                    appUiState = appUiState,
+                    onEmailCardClick = onEmailCardClick,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.email_list_only_horizontal_padding)
+                        )
+                )
+            }
 
             AnimatedVisibility(visible = navigationType == AppNavigationType.BOTTOM_NAVIGATION) {
                 AppBottomNavigationBar(

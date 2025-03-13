@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -18,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,13 +60,14 @@ fun PreviewDetailsScreen() {
 fun DetailsScreen(
     modifier: Modifier = Modifier,
     appUiState: AppUiState,
+    isFullScreen: Boolean = false,
     onBackPressed: () -> Unit,
 ) {
 
     BackHandler {
         onBackPressed()
     }
-    
+
     Box(modifier = modifier) {
         LazyColumn(
             contentPadding = WindowInsets.safeDrawing.asPaddingValues(),
@@ -73,19 +76,27 @@ fun DetailsScreen(
                 .background(color = MaterialTheme.colorScheme.inverseOnSurface)
         ) {
             item {
-                DetailsScreenTopBar(
-                    onBackButtonClicked = onBackPressed,
-                    appUiState = appUiState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = dimensionResource(R.dimen.topbar_padding_vertical))
-                )
+                if (isFullScreen) {
+                    DetailsScreenTopBar(
+                        onBackButtonClicked = onBackPressed,
+                        appUiState = appUiState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = dimensionResource(R.dimen.topbar_padding_vertical))
+                    )
+                }
 
                 DetailsScreenEmailDetailCard(
                     email = appUiState.currentSelectedEmail,
                     mailboxType = appUiState.currentMailbox,
-                    modifier = Modifier
-                        .padding(dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
+                    isFullScreen = isFullScreen,
+                    modifier = if (isFullScreen) {
+                        Modifier
+                            .navigationBarsPadding()
+                            .padding(dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
+                    } else {
+                        Modifier.padding(dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
+                    }
                 )
             }
         }
@@ -134,6 +145,7 @@ fun DetailsScreenTopBar(
 fun DetailsScreenEmailDetailCard(
     modifier: Modifier = Modifier,
     email: Email,
+    isFullScreen: Boolean,
     mailboxType: MailboxType
 ) {
     val context = LocalContext.current
@@ -155,6 +167,17 @@ fun DetailsScreenEmailDetailCard(
                 email = email,
                 modifier = Modifier.fillMaxWidth()
             )
+            if (!isFullScreen) {
+                Text(
+                    text = stringResource(email.subject),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.padding(
+                        top = dimensionResource(R.dimen.detail_content_padding_top),
+                        bottom = dimensionResource(R.dimen.detail_expanded_subject_body_spacing)
+                    ),
+                )
+            }
             Text(
                 modifier = Modifier.fillMaxSize(),
                 text = stringResource(email.body),

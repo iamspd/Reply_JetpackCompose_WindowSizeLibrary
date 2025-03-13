@@ -50,7 +50,9 @@ class ReplyViewModel : ViewModel() {
             LocalEmailsDataProvider.allEmails.groupBy { it.mailbox }
 
         _appUiState.value = AppUiState(
-            mailboxes = mailboxes
+            mailboxes = mailboxes,
+            currentSelectedEmail = mailboxes[MailboxType.Inbox]?.get(0)
+                ?: LocalEmailsDataProvider.defaultEmail
         )
     }
 }
