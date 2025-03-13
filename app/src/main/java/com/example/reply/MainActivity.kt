@@ -7,10 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.reply.ui.ReplyApp
 import com.example.reply.ui.theme.ReplyTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +22,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ReplyTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val layoutDirection = LocalLayoutDirection.current
+
+                Surface(
+                    modifier = Modifier
+                ) {
+                    ReplyApp()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     ReplyTheme {
-        Greeting("Android")
+       ReplyApp()
     }
 }
