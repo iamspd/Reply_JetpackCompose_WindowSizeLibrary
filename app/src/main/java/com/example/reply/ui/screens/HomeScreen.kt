@@ -110,6 +110,7 @@ fun HomeScreen(
                             .fillMaxHeight()
                             .background(MaterialTheme.colorScheme.inverseOnSurface)
                             .padding(dimensionResource(R.dimen.drawer_padding_content))
+                            .testTag(stringResource(R.string.navigation_drawer))
                     )
                 }
             }
