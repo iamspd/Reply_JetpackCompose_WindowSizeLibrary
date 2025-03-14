@@ -93,9 +93,9 @@ fun DetailsScreen(
                     modifier = if (isFullScreen) {
                         Modifier
                             .navigationBarsPadding()
-                            .padding(dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
+                            .padding(horizontal = dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
                     } else {
-                        Modifier.padding(dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
+                        Modifier.padding(horizontal = dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
                     }
                 )
             }

@@ -91,7 +91,6 @@ fun EmailListAndDetailContent(
         DetailsScreen(
             appUiState = appUiState,
             modifier = Modifier
-                .padding(top = dimensionResource(R.dimen.email_list_item_vertical_spacing))
                 .weight(1f)
                 .testTag(stringResource(R.string.details_screen)),
             onBackPressed = { activity.finish() }
